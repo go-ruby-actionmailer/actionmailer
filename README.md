@@ -30,11 +30,16 @@ Everything interpreter-independent lives here as pure Go. Two things are host
 seams:
 
 1. **Body rendering** is a [`RenderBody`](#api) callback. In Rails this is Action
-   View resolving `welcome.text.erb` / `welcome.html.erb`; here the host (for
-   example wiring up [go-ruby-actionview](https://github.com/go-ruby-actionview/actionview))
-   supplies the rendered text/HTML per format and this package assembles the MIME
+   View resolving `welcome.text.erb` / `welcome.html.erb`; here the host supplies
+   the rendered text/HTML per format and this package assembles the MIME
    structure (multipart/alternative → related → mixed) around it. Returning
-   `ErrNoTemplate` skips a format, exactly as a missing template does.
+   `ErrNoTemplate` skips a format, exactly as a missing template does. A ready-made
+   [`View`](#templates--layouts) — built on
+   [go-ruby-actionview](https://github.com/go-ruby-actionview/actionview) —
+   supplies that callback with real template lookup (locale fallback, implicit
+   text/HTML pairing) and layout wrapping; only the final ERB **evaluation** stays
+   a seam (wired by the host to go-ruby-erb + a Ruby runtime), so the package stays
+   CGO- and runtime-free.
 2. **Delivery transport** is the [`DeliveryMethod`](#api) interface. `SMTPDelivery`
    performs the send through an injectable `net/smtp.SendMail`-shaped function, so
    tests never open a socket.
@@ -151,6 +156,18 @@ type DeliveryMethod interface{ Deliver(m *mail.Message) error }
 func NewTestDelivery(dst *[]*mail.Message) *TestDelivery // :test — append to a slice
 func NewFileDelivery(location string) *FileDelivery      // :file — one file per recipient
 func NewSMTPDelivery(addr string) *SMTPDelivery          // :smtp — net/smtp (injectable Send)
+func NewSendmailDelivery() *SendmailDelivery             // :sendmail — pipe to /usr/sbin/sendmail -i -t
+
+// i18n subject: mail(subject: …) omitted -> <mailer_scope>.<action>.subject.
+type I18n struct { Locale string; Translations map[string]string }
+func NewI18n(locale string) *I18n
+func (i *I18n) Set(key, value string) *I18n // "user_mailer.welcome.subject" = "Welcome, %{name}!"
+
+// Templates + layouts (see below).
+type View struct { Store *TemplateStore; Eval EvalTemplate; Locale, Layout string; Context *actionview.Context }
+func (v *View) RenderBody() RenderBody
+func (b *Base) UseView(v *View) *Base
+func (b *Base) UseSendmail() *Base
 
 // Interceptors & observers (register_interceptor / register_observer).
 type Interceptor interface{ DeliveringEmail(m *mail.Message) }
@@ -168,21 +185,64 @@ type Observer interface{ DeliveredEmail(m *mail.Message) }
 Boundaries are produced by the overridable `GenerateBoundary` (deterministic by
 default for reproducible output); inline Content-IDs by `GenerateContentID`.
 Attachment media types are guessed from the filename extension and overridable on
-the returned `*Attachment`.
+the returned `*Attachment`. Header fields are emitted in the Mail gem's canonical
+`FIELD_ORDER`, multipart containers carry `Content-Transfer-Encoding: 7bit` (and
+the root a `charset=UTF-8`), and text parts negotiate their transfer encoding the
+way the gem does — `7bit` for US-ASCII, else the lower-cost of quoted-printable
+and base64 — so the wire bytes match `Mail::Message#encoded`.
+
+## Templates & layouts
+
+`View` turns a [`TemplateStore`](#api) plus an `EvalTemplate` seam into a
+`RenderBody`, reusing [go-ruby-actionview](https://github.com/go-ruby-actionview/actionview)
+for the render pipeline and html-safety. It resolves the mailer's per-format
+templates (with locale fallback and implicit text/HTML pairing), evaluates each
+through the ERB seam, and wraps the result in the format's layout — exposing the
+rendered body to the layout as the html-safe `yield` local:
+
+```go
+store := am.NewTemplateStore().
+	Add("UserMailer", "welcome", "text", "Hi <%= name %>").
+	Add("UserMailer", "welcome", "html", "<p>Hi <%= name %></p>").
+	AddLayout("mailer", "html", "", "<body><%= yield %></body>")
+
+m.UseView(&am.View{Store: store, Eval: myERBEval, Layout: "mailer"})
+```
+
+## Delivery methods
+
+`:test` (append to a slice), `:file` (one file per recipient), `:smtp`
+(net/smtp through an injectable send function), and `:sendmail` (pipe the encoded
+message to `/usr/sbin/sendmail -i -t`, with an injectable executor so tests never
+spawn a process). `deliver_now` delivers inline; `deliver_later` runs through the
+Active Job seam.
+
+## i18n subject
+
+When an action calls `mail(...)` with no `subject:` (and no `default subject:`),
+the subject is looked up from the [`I18n`](#api) store at
+`<locale>.<mailer_scope>.<action>.subject` (e.g. `en.user_mailer.welcome.subject`),
+with `%{name}` interpolations from `MailOptions.SubjectVars` and a humanised
+action name as the fallback — mirroring ActionMailer's `default_i18n_subject`.
 
 ## Roadmap (deferred)
 
-This is the **v0.1 foundation** — mailer base, message composition, delivery
-methods, and interceptor/observer hooks. Deferred to later passes:
+Implemented: mailer base + actions, message composition and multipart MIME
+assembly, attachments (regular + inline/CID), template lookup with locale
+fallback and layouts (`View`), the `:test` / `:file` / `:smtp` / `:sendmail`
+delivery methods, `deliver_now` / `deliver_later`, interceptors + observers,
+`default` options, i18n subject interpolation, and gem-faithful field ordering
+and text transfer-encoding negotiation.
+
+Deferred to later passes:
 
 - The **Rails engine & generators** (`rails g mailer`), railtie configuration.
-- The full **Action View template resolver** — template lookup/inheritance,
-  layouts, format/locale/handler resolution (rendering stays behind `RenderBody`).
-- **i18n subject lookup** (`en.user_mailer.welcome.subject`) and locale fallbacks.
+- The full on-disk **Action View template resolver** — template
+  inheritance, handler discovery and view-path search (the in-memory
+  `TemplateStore` covers action/format/locale lookup; ERB *evaluation* stays a
+  host seam).
 - **Mailer previews** (`ActionMailer::Preview`).
 - **Inline-CSS / premailer** for HTML parts.
-- **Text-part transfer-encoding** (quoted-printable / base64 auto-selection for
-  non-ASCII bodies; v0.1 emits UTF-8 text parts as 7bit).
 - The **brand asset** (banner) and MkDocs/mike docs site (org infra follow-up).
 
 ## Tests & coverage
@@ -200,6 +260,15 @@ COVERPKG=$(go list ./... | paste -sd, -)
 go test -race -coverpkg="$COVERPKG" -coverprofile=cover.out ./...
 go tool cover -func=cover.out | tail -1   # 100.0%
 ```
+
+A **differential gem oracle** (`TestRubyOracleByteParity`, skip-gated on Ruby +
+the `actionmailer` gem, so it never runs on a Ruby-less CI) composes the same
+messages with real Rails Action Mailer and asserts the go output matches
+`Mail::Message#encoded` byte-for-byte across single-part, alternative, mixed,
+related, fully-nested and non-ASCII scenarios — normalising only the
+non-deterministic Date / Message-ID / inline Content-ID and three semantically
+inert go-ruby-mail-vs-mail-gem encoder-policy details (parameter folding,
+boundary quoting, and the gem's empty MIME preamble line).
 
 CGO-free, `gofmt` + `go vet` clean, and green across the six 64-bit Go targets
 (amd64, arm64, riscv64, loong64, ppc64le, s390x) and three OSes

@@ -101,22 +101,23 @@ func (a *Attachments) filter(inline bool) []*Attachment {
 	return out
 }
 
-// attachmentPart builds the Mail::Part for an attachment: a base64-encoded body
-// with a name-carrying Content-Type and a Content-Disposition (and a Content-ID
-// for inline parts).
+// attachmentPart builds the Mail::Part for an attachment, mirroring the Mail
+// gem's add_file output: a bare (parameter-less) Content-Type, a base64 body,
+// and a Content-Disposition carrying the filename (plus a Content-ID for inline
+// parts). Field order is normalised later by sortHeaders.
 func attachmentPart(a *Attachment) *mail.Message {
 	p := mail.New("")
 	ct := a.ContentType
 	if ct == "" {
 		ct = "application/octet-stream"
 	}
-	p.SetContentTypeParams(ct, []string{"name"}, map[string]string{"name": a.Name})
+	p.SetHeader("Content-Type", ct)
 
 	disposition := "attachment"
 	if a.Inline {
 		disposition = "inline"
 	}
-	p.SetHeader("Content-Disposition", disposition+`; filename="`+a.Name+`"`)
+	p.SetHeader("Content-Disposition", disposition+"; filename="+quoteFilename(a.Name))
 	if a.Inline {
 		p.SetHeader("Content-ID", a.ContentID)
 	}
@@ -127,6 +128,32 @@ func attachmentPart(a *Attachment) *mail.Message {
 	// Encoding in sync so Decoded() round-trips the base64 payload.
 	p.SetContentTransferEncoding("base64")
 	return p
+}
+
+// quoteFilename renders a filename for an RFC 2045 parameter: a bare token when
+// it is made only of token characters (as the Mail gem emits, e.g.
+// filename=terms.pdf), otherwise a quoted-string.
+func quoteFilename(name string) string {
+	if name != "" && isToken(name) {
+		return name
+	}
+	return `"` + strings.ReplaceAll(name, `"`, `\"`) + `"`
+}
+
+// isToken reports whether s is a valid RFC 2045 token (no tspecials, spaces or
+// controls), so it may appear unquoted as a parameter value.
+func isToken(s string) bool {
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		if c <= 0x20 || c >= 0x7F {
+			return false
+		}
+		switch c {
+		case '(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=':
+			return false
+		}
+	}
+	return true
 }
 
 // builtinTypes maps common extensions to media types, kept deterministic across
