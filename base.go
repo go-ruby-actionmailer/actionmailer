@@ -100,6 +100,11 @@ type Base struct {
 	// When nil, DeliverLater runs the delivery inline.
 	EnqueueJob func(job func() error) error
 
+	// I18n resolves a subject when an action omits one (and no "subject" default
+	// is set), mirroring ActionMailer's default_i18n_subject. When nil, an
+	// action with no subject simply has no Subject header.
+	I18n *I18n
+
 	interceptors []Interceptor
 	observers    []Observer
 	actions      map[string]Action
@@ -147,6 +152,20 @@ func (b *Base) RegisterObserver(o Observer) *Base {
 // b.Deliveries, mirroring `config.action_mailer.delivery_method = :test`.
 func (b *Base) UseTestDelivery() *Base {
 	b.DeliveryMethod = NewTestDelivery(&b.Deliveries)
+	return b
+}
+
+// UseSendmail wires the delivery method to a [SendmailDelivery], mirroring
+// `config.action_mailer.delivery_method = :sendmail`.
+func (b *Base) UseSendmail() *Base {
+	b.DeliveryMethod = NewSendmailDelivery()
+	return b
+}
+
+// UseView installs v's [View.RenderBody] as the body-rendering seam, mirroring
+// wiring Action View's template resolver to a mailer.
+func (b *Base) UseView(v *View) *Base {
+	b.RenderBody = v.RenderBody()
 	return b
 }
 

@@ -39,8 +39,12 @@ type MailOptions struct {
 	// To, Cc, Bcc and ReplyTo are recipient/reply lists; each list is joined
 	// with ", " into its header. Blank lists fall back to the matching default.
 	To, Cc, Bcc, ReplyTo []string
-	// Subject is the subject; when blank the "subject" default is used.
+	// Subject is the subject; when blank the "subject" default is used, and if
+	// that is blank too an i18n lookup (see [Base.I18n]) resolves it.
 	Subject string
+	// SubjectVars are the %{name} interpolation values for an i18n subject
+	// lookup (the interpolations of ActionMailer's default_i18n_subject).
+	SubjectVars map[string]any
 	// Date sets the Date header when HasDate is true; otherwise Base.Now is used.
 	Date    time.Time
 	HasDate bool
@@ -79,6 +83,9 @@ func (m *Mailer) Mail(opts MailOptions) error {
 	d := m.base.Defaults
 	from := firstPresent(opts.From, d["from"])
 	subject := firstPresent(opts.Subject, d["subject"])
+	if !coreext.Present(subject) {
+		subject = m.base.i18nSubject(m.action, opts.SubjectVars)
+	}
 	replyTo := defaultList(opts.ReplyTo, d["reply_to"])
 	to := defaultList(opts.To, d["to"])
 	cc := defaultList(opts.Cc, d["cc"])
@@ -123,6 +130,11 @@ func (m *Mailer) Mail(opts MailOptions) error {
 	for k, v := range mergedHeaders(m.base.defaultHeaders(), m.headers, opts.Headers) {
 		root.SetHeader(k, v)
 	}
+
+	// Stamp charset on a multipart root and emit every field in the Mail gem's
+	// canonical order, so the wire bytes match Mail::Message#encoded.
+	addRootCharset(root)
+	sortHeaders(root)
 
 	m.msg = root
 	return nil
@@ -200,26 +212,50 @@ func (m *Mailer) buildBodyRoot(opts MailOptions) (*mail.Message, error) {
 }
 
 // multipart builds a multipart/<subtype> container wrapping parts, with a fresh
-// deterministic boundary.
+// deterministic boundary. Like the Mail gem, every multipart container carries a
+// Content-Transfer-Encoding of 7bit.
 func (m *Mailer) multipart(subtype string, parts []*mail.Message) *mail.Message {
 	m.boundarySeq++
 	boundary := GenerateBoundary(m.boundarySeq)
 	c := mail.New("")
 	c.SetContentTypeParams("multipart/"+subtype, []string{"boundary"},
 		map[string]string{"boundary": boundary})
+	c.SetHeader("Content-Transfer-Encoding", "7bit")
 	for _, p := range parts {
 		c.AddPart(p)
 	}
 	return c
 }
 
-// textLeaf builds a single content part of the given media type (charset UTF-8).
+// addRootCharset stamps charset=UTF-8 onto a multipart root container's
+// Content-Type (after the boundary parameter), mirroring how ActionMailer sets
+// the message charset on the top-level part. Single-part leaves already carry
+// their own charset, so only multipart roots need this.
+func addRootCharset(root *mail.Message) {
+	if len(root.Parts()) == 0 {
+		return
+	}
+	params := root.ContentTypeParameters()
+	root.SetContentTypeParams(root.MimeType(), []string{"boundary", "charset"},
+		map[string]string{"boundary": params["boundary"], "charset": "UTF-8"})
+}
+
+// textLeaf builds a single content part of the given media type (charset UTF-8),
+// negotiating its Content-Transfer-Encoding the way the Mail gem does: 7bit for
+// pure US-ASCII, otherwise the lower-cost of quoted-printable and base64.
 func textLeaf(contentType, body string) *mail.Message {
 	p := mail.New("")
 	p.SetContentTypeParams(contentType, []string{"charset"},
 		map[string]string{"charset": "UTF-8"})
-	p.SetHeader("Content-Transfer-Encoding", "7bit")
-	p.SetBody(body)
+	enc := negotiateTextEncoding(body)
+	if enc == "7bit" {
+		p.SetHeader("Content-Transfer-Encoding", "7bit")
+		p.SetBody(body)
+		return p
+	}
+	b := &mail.Body{Raw: body}
+	p.SetBody(b.Encode(enc))
+	p.SetContentTransferEncoding(enc)
 	return p
 }
 

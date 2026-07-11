@@ -5,8 +5,10 @@
 package actionmailer
 
 import (
+	"bytes"
 	"net/smtp"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -121,6 +123,67 @@ func (s *SMTPDelivery) Deliver(m *mail.Message) error {
 	to = append(to, m.Bcc()...)
 
 	return s.Send(s.Addr, auth, from, to, []byte(m.Encoded()))
+}
+
+// SendmailDelivery is the :sendmail delivery method: it pipes the encoded
+// message to a local sendmail-compatible binary, mirroring
+// ActionMailer's :sendmail. The default binary is /usr/sbin/sendmail invoked
+// with "-i -t" (read recipients from the message, don't treat a lone dot as
+// end-of-input).
+type SendmailDelivery struct {
+	// Location is the sendmail binary path (default "/usr/sbin/sendmail").
+	Location string
+	// Arguments are the flags passed to sendmail (default {"-i", "-t"}).
+	Arguments []string
+
+	// run executes the command feeding stdin; injectable so tests never spawn a
+	// process. It receives the binary, its args, and the message bytes.
+	run func(path string, args []string, stdin []byte) error
+}
+
+// NewSendmailDelivery returns a [SendmailDelivery] using /usr/sbin/sendmail -i -t.
+func NewSendmailDelivery() *SendmailDelivery {
+	return &SendmailDelivery{
+		Location:  "/usr/sbin/sendmail",
+		Arguments: []string{"-i", "-t"},
+		run:       runSendmail,
+	}
+}
+
+// Deliver pipes the encoded message to the sendmail binary. When the arguments
+// do not already carry -t, the To/Cc/Bcc recipients are appended so sendmail
+// knows where to route the message (matching the gem, which appends the
+// destinations when it is not reading them from the headers).
+func (s *SendmailDelivery) Deliver(m *mail.Message) error {
+	args := append([]string(nil), s.Arguments...)
+	if !hasFlag(args, "-t") {
+		args = append(args, m.To()...)
+		args = append(args, m.Cc()...)
+		args = append(args, m.Bcc()...)
+	}
+	exec := s.run
+	if exec == nil {
+		exec = runSendmail
+	}
+	return exec(s.Location, args, []byte(m.Encoded()))
+}
+
+// hasFlag reports whether args contains flag.
+func hasFlag(args []string, flag string) bool {
+	for _, a := range args {
+		if a == flag {
+			return true
+		}
+	}
+	return false
+}
+
+// runSendmail is the default [SendmailDelivery] executor: it runs the binary
+// and writes the message to its stdin.
+func runSendmail(path string, args []string, stdin []byte) error {
+	cmd := exec.Command(path, args...)
+	cmd.Stdin = bytes.NewReader(stdin)
+	return cmd.Run()
 }
 
 // host returns the auth host: Host if set, else the host part of Addr.
