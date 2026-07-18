@@ -6,5 +6,7 @@ github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529 h1:md/l6ifEY6S0Iy1
 github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529/go.mod h1:HEJVI7jQ/BnjiSiu2Wj934QboEAgdv47RNOqvZb+nRw=
 github.com/go-ruby-mail/mail v0.0.0-20260701122047-67f8e8ec1d6e h1:mBJm+ZY0JP4pKMEiIfTPcfUuGL+8ACLmQEVb3q/yu/E=
 github.com/go-ruby-mail/mail v0.0.0-20260701122047-67f8e8ec1d6e/go.mod h1:YJN6l0WpGBz87UAbyHGqnH14iwABfjvrZPUunn9OrNs=
+github.com/go-ruby-mail/mail v0.0.0-20260717070235-fe48e8a63a7c h1:h+RWYqZv0XVtmtd+HHur06xfut+XhIIvsq6HmVyGsSU=
+github.com/go-ruby-mail/mail v0.0.0-20260717070235-fe48e8a63a7c/go.mod h1:YJN6l0WpGBz87UAbyHGqnH14iwABfjvrZPUunn9OrNs=
 golang.org/x/net v0.57.0 h1:K5+3DljvIuDG9/Jv9rvyMywYNFCQ9RSUY6OOTTkT+tE=
 golang.org/x/net v0.57.0/go.mod h1:KpXc8iv+r3XplLAG/f7Jsf9RPszJzdR0f58q9vGOuEU=
