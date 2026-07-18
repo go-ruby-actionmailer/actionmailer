@@ -1,5 +1,7 @@
 github.com/go-ruby-actionview/actionview v0.0.0-20260711112627-bcb68f5238dc h1:TouNlGG+0qB2gvzdWeOUvOckgj/MODDF1OvwJQhcVAI=
 github.com/go-ruby-actionview/actionview v0.0.0-20260711112627-bcb68f5238dc/go.mod h1:WCZlGN+Bk/7h5tHjZTcbSF8P6x+pgo3zsmdt7pdZjEs=
+github.com/go-ruby-actionview/actionview v0.0.0-20260717061522-607871af2985 h1:VA7200mlj7kICHl2GMS1FXd3kWJBoiVY/83dLEYVZB8=
+github.com/go-ruby-actionview/actionview v0.0.0-20260717061522-607871af2985/go.mod h1:WCZlGN+Bk/7h5tHjZTcbSF8P6x+pgo3zsmdt7pdZjEs=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983 h1:PPQrmolQwLSsVpDyirNZjB6iPMtCeB/4aoGzuYUZ5cM=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983/go.mod h1:ykSisArfgmpZFoV0y0irolshuOdSPyALFz/wWCJiaEE=
 github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529 h1:md/l6ifEY6S0Iy1nBk5hVt5BhnWJRqhB08gVEsVvS28=
