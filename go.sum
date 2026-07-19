@@ -2,6 +2,8 @@ github.com/go-ruby-actionview/actionview v0.0.0-20260711112627-bcb68f5238dc h1:T
 github.com/go-ruby-actionview/actionview v0.0.0-20260711112627-bcb68f5238dc/go.mod h1:WCZlGN+Bk/7h5tHjZTcbSF8P6x+pgo3zsmdt7pdZjEs=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983 h1:PPQrmolQwLSsVpDyirNZjB6iPMtCeB/4aoGzuYUZ5cM=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983/go.mod h1:ykSisArfgmpZFoV0y0irolshuOdSPyALFz/wWCJiaEE=
+github.com/go-ruby-activesupport/activesupport v0.0.0-20260718060557-f0d72c5fd486 h1:XXy+6apdsaE1+UOGd5EhGeAn0An51pOPWsFoeGhjJgc=
+github.com/go-ruby-activesupport/activesupport v0.0.0-20260718060557-f0d72c5fd486/go.mod h1:ykSisArfgmpZFoV0y0irolshuOdSPyALFz/wWCJiaEE=
 github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529 h1:md/l6ifEY6S0Iy1nBk5hVt5BhnWJRqhB08gVEsVvS28=
 github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529/go.mod h1:HEJVI7jQ/BnjiSiu2Wj934QboEAgdv47RNOqvZb+nRw=
 github.com/go-ruby-mail/mail v0.0.0-20260701122047-67f8e8ec1d6e h1:mBJm+ZY0JP4pKMEiIfTPcfUuGL+8ACLmQEVb3q/yu/E=
