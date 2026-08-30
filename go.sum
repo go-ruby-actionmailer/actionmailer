@@ -2,12 +2,16 @@ github.com/go-ruby-actionview/actionview v0.0.0-20260711112627-bcb68f5238dc h1:T
 github.com/go-ruby-actionview/actionview v0.0.0-20260711112627-bcb68f5238dc/go.mod h1:WCZlGN+Bk/7h5tHjZTcbSF8P6x+pgo3zsmdt7pdZjEs=
 github.com/go-ruby-actionview/actionview v0.0.0-20260825130933-98b7c44f4c14 h1:yAwk/bMaPTj7mP59Xff/UJLEM9UfdT6mOgSGBNsnkXA=
 github.com/go-ruby-actionview/actionview v0.0.0-20260825130933-98b7c44f4c14/go.mod h1:r3cP1hcxRxflbAS1vqeXQIJkAbyChCxe/GWBmfgnEXY=
+github.com/go-ruby-actionview/actionview v0.0.0-20260826125716-4711e2afde65 h1:V+c4vvkyQ/SQJwJl45ZGnNvd5rD0B5SiDgpNmhoYSZA=
+github.com/go-ruby-actionview/actionview v0.0.0-20260826125716-4711e2afde65/go.mod h1:dMo4duuB8Z9Pd2Cy8zSg5V7Z9UyoKaYSIGgi+22j+8s=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983 h1:PPQrmolQwLSsVpDyirNZjB6iPMtCeB/4aoGzuYUZ5cM=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983/go.mod h1:ykSisArfgmpZFoV0y0irolshuOdSPyALFz/wWCJiaEE=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260820071506-344413ecaa5f h1:dUPhMtIOtGvwnXLsgBZH3t/XsI7xANhtFg0knSp+mDw=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260820071506-344413ecaa5f/go.mod h1:ykSisArfgmpZFoV0y0irolshuOdSPyALFz/wWCJiaEE=
 github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529 h1:md/l6ifEY6S0Iy1nBk5hVt5BhnWJRqhB08gVEsVvS28=
 github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529/go.mod h1:HEJVI7jQ/BnjiSiu2Wj934QboEAgdv47RNOqvZb+nRw=
+github.com/go-ruby-erb/erb v0.0.0-20260717064518-1e3bc0812b45 h1:C4HnZxZAm46pyQfkE7ELXCyDisI3Buzg/cR4d2F8dlY=
+github.com/go-ruby-erb/erb v0.0.0-20260717064518-1e3bc0812b45/go.mod h1:HEJVI7jQ/BnjiSiu2Wj934QboEAgdv47RNOqvZb+nRw=
 github.com/go-ruby-mail/mail v0.0.0-20260701122047-67f8e8ec1d6e h1:mBJm+ZY0JP4pKMEiIfTPcfUuGL+8ACLmQEVb3q/yu/E=
 github.com/go-ruby-mail/mail v0.0.0-20260701122047-67f8e8ec1d6e/go.mod h1:YJN6l0WpGBz87UAbyHGqnH14iwABfjvrZPUunn9OrNs=
 github.com/go-ruby-mail/mail v0.0.0-20260717070235-fe48e8a63a7c h1:h+RWYqZv0XVtmtd+HHur06xfut+XhIIvsq6HmVyGsSU=
