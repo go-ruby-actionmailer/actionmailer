@@ -5,7 +5,7 @@ go 1.26.4
 require (
 	github.com/go-ruby-actionview/actionview v0.0.0-20260826125716-4711e2afde65
 	github.com/go-ruby-activesupport/activesupport v0.0.0-20260820071506-344413ecaa5f
-	github.com/go-ruby-mail/mail v0.0.0-20260717070235-fe48e8a63a7c
+	github.com/go-ruby-mail/mail v0.0.0-20260916094742-929003e330ea
 )
 
 require (
