@@ -4,6 +4,8 @@ github.com/go-ruby-actionview/actionview v0.0.0-20260825130933-98b7c44f4c14 h1:y
 github.com/go-ruby-actionview/actionview v0.0.0-20260825130933-98b7c44f4c14/go.mod h1:r3cP1hcxRxflbAS1vqeXQIJkAbyChCxe/GWBmfgnEXY=
 github.com/go-ruby-actionview/actionview v0.0.0-20260826125716-4711e2afde65 h1:V+c4vvkyQ/SQJwJl45ZGnNvd5rD0B5SiDgpNmhoYSZA=
 github.com/go-ruby-actionview/actionview v0.0.0-20260826125716-4711e2afde65/go.mod h1:dMo4duuB8Z9Pd2Cy8zSg5V7Z9UyoKaYSIGgi+22j+8s=
+github.com/go-ruby-actionview/actionview v0.0.0-20260916090312-73677dcf3f1f h1:FUFGkgm12HoPORb9Zzusye2stNd2xJx5Kt9GmBaEtXc=
+github.com/go-ruby-actionview/actionview v0.0.0-20260916090312-73677dcf3f1f/go.mod h1:CyEhiENu/KBV04u0j81azG0DSnVlAU+k/1ELLvTK0Ls=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983 h1:PPQrmolQwLSsVpDyirNZjB6iPMtCeB/4aoGzuYUZ5cM=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983/go.mod h1:ykSisArfgmpZFoV0y0irolshuOdSPyALFz/wWCJiaEE=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260820071506-344413ecaa5f h1:dUPhMtIOtGvwnXLsgBZH3t/XsI7xANhtFg0knSp+mDw=
@@ -22,3 +24,5 @@ golang.org/x/net v0.57.0 h1:K5+3DljvIuDG9/Jv9rvyMywYNFCQ9RSUY6OOTTkT+tE=
 golang.org/x/net v0.57.0/go.mod h1:KpXc8iv+r3XplLAG/f7Jsf9RPszJzdR0f58q9vGOuEU=
 golang.org/x/net v0.58.0 h1:ynWG7rqYi4ccpTEuPZ2QGWHktVEM9DMCj9yzDE0Q7To=
 golang.org/x/net v0.58.0/go.mod h1:YwCddHnFlT7eLQqVprV19OnhLGtc5xOKgE0RyqgfWAU=
+golang.org/x/net v0.59.0 h1:5zfYln+w5XCxwrnMMJPufRgNoXEaGxl0wo5GqPXyues=
+golang.org/x/net v0.59.0/go.mod h1:2DA/G1UfVbCpQPeWTmMPGY7Cs2PkBkwu743bVX5PIVg=
