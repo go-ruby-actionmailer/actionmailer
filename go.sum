@@ -6,6 +6,8 @@ github.com/go-ruby-actionview/actionview v0.0.0-20260826125716-4711e2afde65 h1:V
 github.com/go-ruby-actionview/actionview v0.0.0-20260826125716-4711e2afde65/go.mod h1:dMo4duuB8Z9Pd2Cy8zSg5V7Z9UyoKaYSIGgi+22j+8s=
 github.com/go-ruby-actionview/actionview v0.0.0-20260916090312-73677dcf3f1f h1:FUFGkgm12HoPORb9Zzusye2stNd2xJx5Kt9GmBaEtXc=
 github.com/go-ruby-actionview/actionview v0.0.0-20260916090312-73677dcf3f1f/go.mod h1:CyEhiENu/KBV04u0j81azG0DSnVlAU+k/1ELLvTK0Ls=
+github.com/go-ruby-actionview/actionview v0.0.0-20260923211214-d926f1a7e0a5 h1:wPUCxIsYaCRN2mTJaOOlDNeJbLTI5Bq+iEKHlHwZmos=
+github.com/go-ruby-actionview/actionview v0.0.0-20260923211214-d926f1a7e0a5/go.mod h1:1JzWacmaj5znT7czB0FEdqX/BRV+9HhRWd4Dov+RCL4=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983 h1:PPQrmolQwLSsVpDyirNZjB6iPMtCeB/4aoGzuYUZ5cM=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260706103309-88c190fc0983/go.mod h1:ykSisArfgmpZFoV0y0irolshuOdSPyALFz/wWCJiaEE=
 github.com/go-ruby-activesupport/activesupport v0.0.0-20260820071506-344413ecaa5f h1:dUPhMtIOtGvwnXLsgBZH3t/XsI7xANhtFg0knSp+mDw=
@@ -14,6 +16,8 @@ github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529 h1:md/l6ifEY6S0Iy1
 github.com/go-ruby-erb/erb v0.0.0-20260629074717-0999ae4dd529/go.mod h1:HEJVI7jQ/BnjiSiu2Wj934QboEAgdv47RNOqvZb+nRw=
 github.com/go-ruby-erb/erb v0.0.0-20260717064518-1e3bc0812b45 h1:C4HnZxZAm46pyQfkE7ELXCyDisI3Buzg/cR4d2F8dlY=
 github.com/go-ruby-erb/erb v0.0.0-20260717064518-1e3bc0812b45/go.mod h1:HEJVI7jQ/BnjiSiu2Wj934QboEAgdv47RNOqvZb+nRw=
+github.com/go-ruby-erb/erb v0.0.0-20260916092736-2b6ca70e94b1 h1:W0IT8+iWj4qU0eZXiGkDLgyWqn8XR5pDwRj2oKZkqlE=
+github.com/go-ruby-erb/erb v0.0.0-20260916092736-2b6ca70e94b1/go.mod h1:HEJVI7jQ/BnjiSiu2Wj934QboEAgdv47RNOqvZb+nRw=
 github.com/go-ruby-mail/mail v0.0.0-20260701122047-67f8e8ec1d6e h1:mBJm+ZY0JP4pKMEiIfTPcfUuGL+8ACLmQEVb3q/yu/E=
 github.com/go-ruby-mail/mail v0.0.0-20260701122047-67f8e8ec1d6e/go.mod h1:YJN6l0WpGBz87UAbyHGqnH14iwABfjvrZPUunn9OrNs=
 github.com/go-ruby-mail/mail v0.0.0-20260717070235-fe48e8a63a7c h1:h+RWYqZv0XVtmtd+HHur06xfut+XhIIvsq6HmVyGsSU=
