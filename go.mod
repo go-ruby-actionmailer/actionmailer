@@ -4,7 +4,7 @@ go 1.27.1
 
 require (
 	github.com/go-ruby-actionview/actionview v0.0.0-20260923211214-d926f1a7e0a5
-	github.com/go-ruby-activesupport/activesupport v0.0.0-20260820071506-344413ecaa5f
+	github.com/go-ruby-activesupport/activesupport v0.0.0-20261007112200-655522ab12a6
 	github.com/go-ruby-mail/mail v0.0.0-20260916094742-929003e330ea
 )
 
