@@ -10,5 +10,5 @@ require (
 
 require (
 	github.com/go-ruby-erb/erb v0.0.0-20260916092736-2b6ca70e94b1 // indirect
-	golang.org/x/net v0.59.0 // indirect
+	golang.org/x/net v0.62.0 // indirect
 )
